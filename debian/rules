@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+PKG_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/[-~].*//')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/eza_x86_64-unknown-linux-gnu.tar.gz"; \
+	tar -xf "eza_x86_64-unknown-linux-gnu.tar.gz"; \
+	rm -f "eza_x86_64-unknown-linux-gnu.tar.gz"
+
+override_dh_auto_install:
+	install -D -m 755 "eza_x86_64-unknown-linux-gnu/eza" debian/eza/usr/bin/eza
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+	rm -rf eza_x86_64-unknown-linux-gnu || true
+
+override_dh_strip:
+
+override_dh_shlibdeps:

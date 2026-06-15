@@ -1,0 +1,18 @@
+Source: eza
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Build-Depends: debhelper-compat (= 13), wget, ca-certificates
+Standards-Version: 4.6.2
+Homepage: https://github.com/eza-community/eza
+Rules-Requires-Root: no
+
+Package: eza
+Architecture: amd64
+Depends: ${misc:Depends}
+Description: A modern, maintained replacement for ls
+ eza is a modern, maintained replacement for the venerable file-listing
+ command-line program ls that ships with Unix and Linux operating systems.
+ It uses colours to distinguish file types and metadata. It knows about
+ symlinks, extended attributes, and Git. And it's small, fast, and just
+ one single binary.
