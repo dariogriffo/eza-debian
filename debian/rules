@@ -10,14 +10,26 @@ override_dh_auto_build:
 	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/eza_x86_64-unknown-linux-gnu.tar.gz"; \
 	tar -xf "eza_x86_64-unknown-linux-gnu.tar.gz"; \
 	rm -f "eza_x86_64-unknown-linux-gnu.tar.gz"
+	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/completions-$(PKG_VERSION).tar.gz"; \
+	tar -xf "completions-$(PKG_VERSION).tar.gz"; \
+	rm -f "completions-$(PKG_VERSION).tar.gz"
+	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/man-$(PKG_VERSION).tar.gz"; \
+	tar -xf "man-$(PKG_VERSION).tar.gz"; \
+	rm -f "man-$(PKG_VERSION).tar.gz"
 
 override_dh_auto_install:
 	install -D -m 755 "eza_x86_64-unknown-linux-gnu/eza" debian/eza/usr/bin/eza
+	install -D -m 644 "target/completions-$(PKG_VERSION)/eza" debian/eza/usr/share/bash-completion/completions/eza
+	install -D -m 644 "target/completions-$(PKG_VERSION)/eza.fish" debian/eza/usr/share/fish/vendor_completions.d/eza.fish
+	install -D -m 644 "target/completions-$(PKG_VERSION)/_eza" debian/eza/usr/share/zsh/vendor-completions/_eza
+	install -D -m 644 "target/man-$(PKG_VERSION)/eza.1" debian/eza/usr/share/man/man1/eza.1
+	install -D -m 644 "target/man-$(PKG_VERSION)/eza_colors.5" debian/eza/usr/share/man/man5/eza_colors.5
+	install -D -m 644 "target/man-$(PKG_VERSION)/eza_colors-explanation.5" debian/eza/usr/share/man/man5/eza_colors-explanation.5
 
 override_dh_auto_test:
 
 override_dh_auto_clean:
-	rm -rf eza_x86_64-unknown-linux-gnu || true
+	rm -rf eza_x86_64-unknown-linux-gnu target || true
 
 override_dh_strip:
 
