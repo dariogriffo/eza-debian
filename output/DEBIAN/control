@@ -3,6 +3,6 @@ Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
 Homepage: https://github.com/dariogriffo/eza-debian
 Package: eza
-Version: EZA_VERSION-BUILD_VERSION+DIST
+Version: EZA_VERSION-BUILD_VERSION~DIST
 Architecture: amd64
 Description: A modern replacement for ls.

@@ -7,7 +7,7 @@ declare -a arr=("jammy" "noble")
 for i in "${arr[@]}"
 do
   UBUNTU_DIST=$i
-  FULL_VERSION=$EZA_VERSION-${BUILD_VERSION}+${UBUNTU_DIST}_amd64_ubu
+  FULL_VERSION=$EZA_VERSION-${BUILD_VERSION}~${UBUNTU_DIST}_amd64_ubu
   docker build . -f Dockerfile.ubu -t eza-ubuntu-$UBUNTU_DIST --build-arg UBUNTU_DIST=$UBUNTU_DIST --build-arg EZA_VERSION=$EZA_VERSION --build-arg BUILD_VERSION=$BUILD_VERSION --build-arg FULL_VERSION=$FULL_VERSION
   id="$(docker create eza-ubuntu-$UBUNTU_DIST)"
   docker cp $id:/eza_$FULL_VERSION.deb - > ./eza_$FULL_VERSION.deb
