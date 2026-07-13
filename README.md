@@ -17,7 +17,7 @@
 # eza for Debian
 
 This repository contains build scripts to produce the _unofficial_ Debian packages
-(.deb) for [eza](https://github.com/eza-community/eza/) hosted at [debian.griffo.io](https://debian.griffo.io)
+(.deb) for [eza](https://github.com/eza-community/eza/) hosted at [deb.griffo.io](https://deb.griffo.io)
 
 <p align="center">
 ⭐⭐⭐ Love using eza on Debian? Show your support by starring this repo or [subscribing](https://buy.stripe.com/aFa28q8hr0lRdlm4a2enS01) — access to this repository requires a yearly subscription. ⭐⭐⭐
@@ -35,13 +35,13 @@ install on Debian. If you're looking for the eza source code, see
 
 ## Install/Update
 
-📖 **Step-by-step install guide:** [Debian](https://debian.griffo.io/install-latest-eza-in-debian.html) · [Ubuntu](https://debian.griffo.io/install-latest-eza-in-ubuntu.html)
+📖 **Step-by-step install guide:** [Debian](https://deb.griffo.io/install-latest-eza-in-debian.html) · [Ubuntu](https://deb.griffo.io/install-latest-eza-in-ubuntu.html)
 
 ### The Debian way
 
 ```sh
-curl -sS https://debian.griffo.io/3B9335DF576D3D58059C6AA50B56A1A69762E9FF.asc | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/debian.griffo.io.gpg
-echo "deb https://debian.griffo.io//apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/debian.griffo.io.list
+curl -sS https://deb.griffo.io/3B9335DF576D3D58059C6AA50B56A1A69762E9FF.asc | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/deb.griffo.io.gpg
+echo "deb https://deb.griffo.io//apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/deb.griffo.io.list
 sudo apt install -y eza
 ```
 
