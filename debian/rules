@@ -1,24 +1,37 @@
 #!/usr/bin/make -f
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 PKG_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/[-~].*//')
+UPSTREAM := https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)
 
 %:
 	dh $@
 
 override_dh_auto_configure:
 
+# All three Linux builds upstream publishes are glibc-linked but need
+# GLIBC_2.18 at most, so they run on every suite we target. The completions
+# and man pages are architecture independent and ship in their own archives,
+# both of which extract into target/.
 override_dh_auto_build:
-	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/eza_x86_64-unknown-linux-gnu.tar.gz"; \
-	tar -xf "eza_x86_64-unknown-linux-gnu.tar.gz"; \
-	rm -f "eza_x86_64-unknown-linux-gnu.tar.gz"
-	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/completions-$(PKG_VERSION).tar.gz"; \
-	tar -xf "completions-$(PKG_VERSION).tar.gz"; \
-	rm -f "completions-$(PKG_VERSION).tar.gz"
-	wget -q "https://github.com/eza-community/eza/releases/download/v$(PKG_VERSION)/man-$(PKG_VERSION).tar.gz"; \
-	tar -xf "man-$(PKG_VERSION).tar.gz"; \
-	rm -f "man-$(PKG_VERSION).tar.gz"
+	@case "$(DEB_HOST_ARCH)" in \
+		amd64) EZA_RELEASE="eza_x86_64-unknown-linux-gnu" ;; \
+		arm64) EZA_RELEASE="eza_aarch64-unknown-linux-gnu" ;; \
+		armhf) EZA_RELEASE="eza_arm-unknown-linux-gnueabihf" ;; \
+		*) echo "Unsupported architecture: $(DEB_HOST_ARCH)"; exit 1 ;; \
+	esac; \
+	echo "Downloading $$EZA_RELEASE for $(PKG_VERSION)..."; \
+	wget -q "$(UPSTREAM)/$$EZA_RELEASE.tar.gz" -O eza.tar.gz; \
+	tar -xf eza.tar.gz; \
+	rm -f eza.tar.gz
+	wget -q "$(UPSTREAM)/completions-$(PKG_VERSION).tar.gz" -O completions.tar.gz
+	tar -xf completions.tar.gz
+	rm -f completions.tar.gz
+	wget -q "$(UPSTREAM)/man-$(PKG_VERSION).tar.gz" -O man.tar.gz
+	tar -xf man.tar.gz
+	rm -f man.tar.gz
 
 override_dh_auto_install:
-	install -D -m 755 "eza_x86_64-unknown-linux-gnu/eza" debian/eza/usr/bin/eza
+	install -D -m 755 eza debian/eza/usr/bin/eza
 	install -D -m 644 "target/completions-$(PKG_VERSION)/eza" debian/eza/usr/share/bash-completion/completions/eza
 	install -D -m 644 "target/completions-$(PKG_VERSION)/eza.fish" debian/eza/usr/share/fish/vendor_completions.d/eza.fish
 	install -D -m 644 "target/completions-$(PKG_VERSION)/_eza" debian/eza/usr/share/zsh/vendor-completions/_eza
@@ -29,8 +42,11 @@ override_dh_auto_install:
 override_dh_auto_test:
 
 override_dh_auto_clean:
-	rm -rf eza_x86_64-unknown-linux-gnu target || true
+	rm -rf eza target || true
 
+# The binary is a prebuilt upstream release: leave it exactly as published and
+# do not try to derive library dependencies from it (they are declared by hand
+# in debian/control).
 override_dh_strip:
 
 override_dh_shlibdeps:

@@ -19,11 +19,25 @@
 This repository contains build scripts to produce the _unofficial_ Debian packages
 (.deb) for [eza](https://github.com/eza-community/eza/) hosted at [deb.griffo.io](https://deb.griffo.io)
 
-Currently supported debian distros are:
-- Bookworm
-- Trixie
-- Forky
-- Sid
+Currently supported Debian distros are:
+- Bookworm (v12)
+- Trixie (v13)
+- Forky (v14)
+- Sid (testing)
+
+Currently supported Ubuntu distros are:
+- Jammy (22.04)
+- Noble (24.04)
+- Questing (25.10)
+- Resolute (26.04)
+
+Supported architectures:
+- amd64 (x86_64)
+- arm64 (aarch64)
+- armhf (32-bit ARM, hard float)
+
+Upstream publishes no i386, armel, ppc64el, s390x or riscv64 binaries, so
+those architectures are not available.
 
 This is an unofficial community project to provide a package that's easy to
 install on Debian. If you're looking for the eza source code, see
@@ -60,6 +74,20 @@ sudo dpkg -i <filename>.deb
 ## Updating
 
 To update to a new version, just follow any of the installation methods above. There's no need to uninstall the old version; it will be updated correctly.
+
+## Building
+
+### Build for single architecture
+```sh
+./build.sh <eza_version> <build_version> <architecture>
+# Example: ./build.sh 0.23.5 1 arm64
+```
+
+### Build for all architectures
+```sh
+./build.sh <eza_version> <build_version> all
+# Example: ./build.sh 0.23.5 1 all
+```
 
 ## Disclaimer
 

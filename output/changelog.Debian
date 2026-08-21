@@ -1,1 +1,8 @@
 eza (FULL_VERSION) DIST; urgency=low
+
+  * New upstream release.
+
+  eza publishes its release notes with each tag; the changelog for this and
+  every other version lives at https://github.com/eza-community/eza/releases
+
+ -- Dario Griffo <dariogriffo@gmail.com>  Fri, 21 Aug 2026 00:00:00 +0000

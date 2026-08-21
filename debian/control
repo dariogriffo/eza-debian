@@ -8,9 +8,9 @@ Homepage: https://github.com/eza-community/eza
 Rules-Requires-Root: no
 
 Package: eza
-Architecture: amd64
-Depends: ${misc:Depends}
-Description: A modern, maintained replacement for ls
+Architecture: amd64 arm64 armhf
+Depends: ${misc:Depends}, libc6 (>= 2.18), libgcc-s1
+Description: Modern, maintained replacement for ls
  eza is a modern, maintained replacement for the venerable file-listing
  command-line program ls that ships with Unix and Linux operating systems.
  It uses colours to distinguish file types and metadata. It knows about
