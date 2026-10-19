@@ -1,4 +1,4 @@
-eza (FULL_VERSION) DIST; urgency=low
+eza (FULL_VERSION) stable; urgency=low
 
   * New upstream release.
 

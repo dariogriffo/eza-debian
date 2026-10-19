@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
 Homepage: https://github.com/dariogriffo/eza-debian
 Package: eza
-Version: EZA_VERSION-BUILD_VERSION~DIST
+Version: EZA_VERSION-BUILD_VERSION~griffo
 Architecture: SUPPORTED_ARCHITECTURES
 PACKAGE_DEPENDS
 Description: Modern, maintained replacement for ls

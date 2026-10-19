@@ -92,34 +92,32 @@ build_architecture() {
         return 1
     fi
 
-    declare -a arr=("bookworm" "trixie" "forky" "sid")
+    # One package for every suite: upstream ships one binary per architecture,
+    # so only the old ~<suite> version suffix ever differed. The fixed ~griffo
+    # keeps it below the distro's own build of the same version.
+    FULL_VERSION="$EZA_VERSION-${BUILD_VERSION}~griffo_${build_arch}"
+    echo "  Building $FULL_VERSION"
 
-    for dist in "${arr[@]}"; do
-        FULL_VERSION="$EZA_VERSION-${BUILD_VERSION}~${dist}_${build_arch}"
-        echo "  Building $FULL_VERSION"
+    if ! docker build . -t "eza-$build_arch" \
+        --build-arg EZA_VERSION="$EZA_VERSION" \
+        --build-arg BUILD_VERSION="$BUILD_VERSION" \
+        --build-arg FULL_VERSION="$FULL_VERSION" \
+        --build-arg ARCH="$build_arch" \
+        --build-arg PACKAGE_DEPENDS="$PACKAGE_DEPENDS"; then
+        echo "❌ Failed to build Docker image for $build_arch"
+        return 1
+    fi
 
-        if ! docker build . -t "eza-$dist-$build_arch" \
-            --build-arg DEBIAN_DIST="$dist" \
-            --build-arg EZA_VERSION="$EZA_VERSION" \
-            --build-arg BUILD_VERSION="$BUILD_VERSION" \
-            --build-arg FULL_VERSION="$FULL_VERSION" \
-            --build-arg ARCH="$build_arch" \
-            --build-arg PACKAGE_DEPENDS="$PACKAGE_DEPENDS"; then
-            echo "❌ Failed to build Docker image for $dist on $build_arch"
-            return 1
-        fi
+    id="$(docker create "eza-$build_arch")"
+    if ! docker cp "$id:/eza_$FULL_VERSION.deb" - > "./eza_$FULL_VERSION.deb"; then
+        echo "❌ Failed to extract .deb package for $build_arch"
+        return 1
+    fi
 
-        id="$(docker create "eza-$dist-$build_arch")"
-        if ! docker cp "$id:/eza_$FULL_VERSION.deb" - > "./eza_$FULL_VERSION.deb"; then
-            echo "❌ Failed to extract .deb package for $dist on $build_arch"
-            return 1
-        fi
-
-        if ! tar -xf "./eza_$FULL_VERSION.deb"; then
-            echo "❌ Failed to extract .deb contents for $dist on $build_arch"
-            return 1
-        fi
-    done
+    if ! tar -xf "./eza_$FULL_VERSION.deb"; then
+        echo "❌ Failed to extract .deb contents for $build_arch"
+        return 1
+    fi
 
     rm -rf "dist/$build_arch" || true
 
